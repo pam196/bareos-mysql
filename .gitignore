@@ -1,0 +1,7 @@
+run.vars
+bareos.env
+bareos-shared/*
+bareos-*.d/*
+*.bak
+build*
+
