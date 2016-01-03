@@ -1,7 +1,12 @@
 #!/bin/bash
 #
 #do some configuration tasks here to keep Dockerfile short
- 
+
+#locale
+locale-gen de_DE.UTF-8
+locale-gen en_US.UTF-8 
+dpkg-reconfigure locales 
+
 #apache redirect root
 echo "
 ServerName localhost
@@ -20,3 +25,4 @@ chown -R mysql:adm /db /var/log/mysql
 for s in bareos-dir bareos-sd bareos-fd postfix apache2 mysql; do
 	update-rc.d $s defaults &&  update-rc.d $s enable
 done
+

@@ -64,6 +64,12 @@ root:         root@mydomain.com
 " >>/etc/aliases
 newaliases
 postfix restart
+
+#Time
+echo "Europe/Berlin" > /etc/timezone
+dpkg-reconfigure -f noninteractive tzdata
+ntpdate -q ptbtime1.ptb.de
+
 ```
 * run.vars --> defines variables used by run_bareos-mysql.sh
 ```sh
