@@ -1,4 +1,8 @@
 # docker-bareos-mysql
+
+[![Docker Pulls](https://img.shields.io/docker/stars/tommi2day/bareos-mysql.svg)](https://hub.docker.com/r/tommi2day/bareos-mysql/)
+[![Docker Pulls](https://img.shields.io/docker/pulls/tommi2day/bareos-mysql.svg)](https://hub.docker.com/r/tommi2day/bareos-mysql/)
+
 ## Bareos on Docker 
 
 Bareos is a fork of the well know backup solution "Bacula"
