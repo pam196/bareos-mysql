@@ -19,15 +19,17 @@ RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 #save default configs
 RUN tar cfvz /etc.tgz /etc/bareos /etc/bareos-webui 
 
+#Mountpoints
+RUN mkdir -p /db /backup
+
 #add scripts
-ADD prepare.ubuntu.mysql.sh /prepare.sh
-ADD start.ubuntu.mysql.sh /start.sh
-ADD configure.ubuntu.mysql.sh /configure.sh
+ADD prepare.sh /prepare.sh
+ADD start.sh /start.sh
+ADD configure.sh /configure.sh
 RUN chmod u+x /*.sh
 RUN /configure.sh
 
 #volumes
-RUN mkdir -p /db /backup
 VOLUME ["/db","/var/log/mysql"]
 VOLUME ["/backup"]
 VOLUME ["/etc/bareos","/var/log/bareos","/etc/bareos-webui"]
