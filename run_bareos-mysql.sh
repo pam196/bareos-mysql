@@ -1,7 +1,7 @@
 #!/bin/bash
 #
 # bareos docker container starter
-
+VERS=15.2
 DOCKER=docker
 VMNAME=${1:-bareos-mysql}
 #define variables
@@ -83,7 +83,7 @@ $DOCKER run $RUN \
 -v ${SHARED_DIR}/log-apache2:/var/log/apache2 \
 -p ${EXT_DIR_PORT}:9101 -p ${EXT_FD_PORT}:9102 -p ${EXT_SD_PORT}:9103 \
 -p ${EXT_DB_PORT}:3306 -p ${EXT_HTML_PORT}:80 \
-${DOCKER_USER}/$VMNAME $@ " >starter
+${DOCKER_USER}/$VMNAME:$VERS $@ " >starter
 
 if [ "$OSTYPE" = "msys" ]; then
 	mv starter starter.ps1
