@@ -1,0 +1,5 @@
+bareos-shared
+bareos-*.d/*
+*.bak
+starter*
+
