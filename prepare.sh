@@ -3,6 +3,8 @@
 # prepare running docker container for services
 # runs each time container starts
 
+PARAMS="$@"
+
 if [ -r /etc/bareos/bareos.env ]; then
 	#run local definition script
 	source 		/etc/bareos/bareos.env
@@ -111,11 +113,11 @@ chown -R www-data:www-data /var/log/apache2
 
 
 #run services
-service apache2 restart
-service postfix restart
-service bareos-dir restart
-service bareos-sd restart
-service bareos-fd restart
+service apache2 stop && service apache2 start
+service postfix stop && service postfix start
+service bareos-dir stop && service bareos-dir start
+service bareos-sd stop && service bareos-sd start
+service bareos-fd stop && service bareos-fd start
 
 #exec final command (e.g. start.sh)
-exec "$@"
+exec $PARAMS
