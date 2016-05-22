@@ -18,7 +18,8 @@ On a Synology Diskstation you may use the Docker Gui instead of the following co
 ```sh
 docker pull tommi2day/bareos-mysql
 docker run --name bareos-mysql \
---add-host="bareos:127.0.0.1" \
+--add-host bareos:127.0.0.1 \
+--add-host ntp:192.53.103.108 \
 -e TARGET_HOST=$TARGET_HOST \
 -e BAREOS_DB_PASSWORD=$BAREOS_DB_PASSWORD \
 -e DB_ROOT_PASSWORD=$DB_ROOT_PASSWORD \
@@ -30,7 +31,7 @@ docker run --name bareos-mysql \
 -v ${SHARED_DIR}/etc-bareos-webui:/etc/bareos-webui \
 -v ${SHARED_DIR}/log-apache2:/var/log/apache2 \
 -p ${EXT_DIR_PORT}:9101 -p ${EXT_FD_PORT}:9102 -p ${EXT_SD_PORT}:9103 \
--p ${EXT_DB_PORT}:3306 -p ${EXT_HTML_PORT}:80 \
+-p ${EXT_DB_PORT}:3306 -p ${EXT_HTML_PORT}:80
 tommi2day/bareos-mysql
 ```
 Bareos Gui Access

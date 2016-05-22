@@ -2,7 +2,8 @@
 #
 # bareos docker container starter
 
-
+DOCKER=docker
+VMNAME=${1:-bareos-mysql}
 #define variables
 if [ -r run.vars ]; then
 	source run.vars
@@ -30,15 +31,15 @@ else
 
 fi
 
-#docker volumes on windows need this extra slash
-if [ "$OSTYPE" = "msys" ]; then
-	P=/
+
+#stop and delete
+RUNNING=$($DOCKER inspect --format="{{ .State.Running }}" $VMNAME 2> /dev/null)
+if [ $? -eq 0 ]; then
+	if [ "$RUNNING" == "true" ]; then
+		$DOCKER stop $VMNAME
+	fi
+	$DOCKER rm $VMNAME
 fi
-
-
-#stop existing container
-docker stop bareos-mysql >/dev/null 
-docker rm bareos-mysql >/dev/null
 
 if [ "$DEBUG" = "clean" ]; then
 	#clean all if debug set to clean
@@ -64,19 +65,29 @@ for f in bareos.env bareos-dir.d bareos-sd.d bareos-clients.d ]; do
 done
 
 #run it
-docker run --name bareos-mysql \
---add-host="bareos:127.0.0.1" \
+echo "	
+$DOCKER run $RUN \
+--name ${VMNAME} \
+--hostname $VMNAME \
+--add-host bareos:127.0.0.1 \
+--add-host ntp:192.53.103.108 \
 -e TARGET_HOST=$TARGET_HOST \
 -e BAREOS_DB_PASSWORD=$BAREOS_DB_PASSWORD \
 -e DB_ROOT_PASSWORD=$DB_ROOT_PASSWORD \
--v $P${BACKUP_DIR}:/backup \
--v $P${SHARED_DIR}/db:/db \
--v $P${SHARED_DIR}/etc-bareos:/etc/bareos \
--v $P${SHARED_DIR}/log-mysql:/var/log/mysql \
--v $P${SHARED_DIR}/log-bareos:/var/log/bareos \
--v $P${SHARED_DIR}/etc-bareos-webui:/etc/bareos-webui \
--v $P${SHARED_DIR}/log-apache2:/var/log/apache2 \
+-v ${BACKUP_DIR}:/backup \
+-v ${SHARED_DIR}/db:/db \
+-v ${SHARED_DIR}/etc-bareos:/etc/bareos \
+-v ${SHARED_DIR}/log-mysql:/var/log/mysql \
+-v ${SHARED_DIR}/log-bareos:/var/log/bareos \
+-v ${SHARED_DIR}/etc-bareos-webui:/etc/bareos-webui \
+-v ${SHARED_DIR}/log-apache2:/var/log/apache2 \
 -p ${EXT_DIR_PORT}:9101 -p ${EXT_FD_PORT}:9102 -p ${EXT_SD_PORT}:9103 \
 -p ${EXT_DB_PORT}:3306 -p ${EXT_HTML_PORT}:80 \
-$RUN \
-tommi2day/bareos-mysql
+${DOCKER_USER}/$VMNAME $@ " >starter
+
+if [ "$OSTYPE" = "msys" ]; then
+	mv starter starter.ps1
+	powershell -File starter.ps1
+else
+	bash starter
+fi
