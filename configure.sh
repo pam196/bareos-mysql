@@ -3,9 +3,9 @@
 #do some configuration tasks here to keep Dockerfile short
 
 #locale
-locale-gen de_DE.UTF-8
-locale-gen en_US.UTF-8 
-dpkg-reconfigure locales 
+#locale-gen de_DE.UTF-8
+#locale-gen en_US.UTF-8 
+#dpkg-reconfigure locales 
 
 #apache redirect root
 #echo "
